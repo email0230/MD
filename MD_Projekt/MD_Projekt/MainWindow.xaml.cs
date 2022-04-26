@@ -23,6 +23,7 @@ namespace MD_Projekt
         Canvas canvas;
         Vertex[] verts;
         Ellipse ellipse;
+        Line line;
         public MainWindow()
         {
             InitializeComponent();
@@ -45,8 +46,15 @@ namespace MD_Projekt
         {
             CreateCanvas();
 
+            Random random = new Random();
+
             // getting input number
             if (!int.TryParse(vertices.Text, out var numOfVertices))
+            {
+                return;
+            }
+
+            if (!double.TryParse(chance.Text, out var lineChance))
             {
                 return;
             }
@@ -76,20 +84,26 @@ namespace MD_Projekt
                 canvas.Children.Add(ellipse);
             }
 
-
-            /* example how to draw a line
-             * 
-            Line lll = new Line()
+            // drawing lines
+            for (int i = 0; i < verts.Length; i++)
             {
-                X1 = 50,
-                Y1 = 50,
-                X2 = 190,
-                Y2 = 100,
-                Stroke = Brushes.Blue,
-                StrokeThickness = 2.5
-            };
-            grid.Children.Add(lll);
-            */
+                for (int j = i + 1; j < verts.Length; j++)
+                {
+                    if (random.NextDouble() < lineChance) 
+                    {
+                        line = new Line()
+                        {
+                            X1 = verts[i].X + 5, // +5 dla wyśrodkowania okręgu wierzchołka
+                            Y1 = verts[i].Y + 5,
+                            X2 = verts[j].X + 5,
+                            Y2 = verts[j].Y + 5,
+                            Stroke = Brushes.Black,
+                            StrokeThickness = 1
+                        };
+                        canvas.Children.Add(line);
+                    }
+                }
+            }
         }
     }
 }

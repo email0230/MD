@@ -14,8 +14,10 @@
 
         <StackPanel Grid.Column="0">
             <!--add stuff inside of the buttons-->
-            <Label FontSize="15" Margin="5" Content="Wierzchołki:"></Label>
-            <TextBox Name="vertices" FontSize="15" Margin="5"></TextBox>
+            <Label FontSize="14" Margin="5" Content="Wierzchołki:"></Label>
+            <TextBox Name="vertices" FontSize="14" Margin="5"></TextBox>
+            <Label FontSize="14" Margin="5" Content="Szansa na połączenie:"></Label>
+            <TextBox Name="chance" FontSize="14" Margin="5"></TextBox>
             <Button Height="50" Margin="5" Click="Draw" Content="Rysuj"/>
         </StackPanel>
     </Grid>
