@@ -24,6 +24,7 @@ namespace MD_Projekt
         Vertex[] verts;
         Ellipse ellipse;
         Line line;
+        int[,] matrix;
         public MainWindow()
         {
             InitializeComponent();
@@ -74,7 +75,18 @@ namespace MD_Projekt
 
             for (int i = 0; i < numOfVertices; i++)
             { 
-                verts[i] = new Vertex();
+                verts[i] = new Vertex(i);
+            }
+
+            //creating matrix of weights
+            matrix = new int[numOfVertices,numOfVertices];
+
+            for (int i = 0; i < numOfVertices; i++)
+            {
+                for (int j = 0; j < numOfVertices; j++)
+                {
+                    matrix[i, j] = 0;
+                }
             }
 
             // drawing vertices
@@ -92,6 +104,11 @@ namespace MD_Projekt
                 ellipse.Margin = new Thickness(vertex.X, vertex.Y, 0, 0);
                 
                 canvas.Children.Add(ellipse);
+
+                Canvas.SetLeft(vertex.text, vertex.textX);
+                Canvas.SetTop(vertex.text, vertex.textY);
+
+                canvas.Children.Add(vertex.text);
             }
 
             // drawing lines
@@ -110,11 +127,12 @@ namespace MD_Projekt
                             Stroke = Brushes.Black,
                             StrokeThickness = 1
                         };
-
-                        LineContainer lineCon = new LineContainer(verts[i], verts[j], line, minWeight, maxWeight);
+                        // drawing line
+                        LineContainer lineCon = new LineContainer(verts[i], verts[j], line, minWeight, maxWeight, matrix);
 
                         canvas.Children.Add(line);
 
+                        //drawing weight
                         Canvas.SetLeft(lineCon.text, lineCon.weightX);
                         Canvas.SetTop(lineCon.text, lineCon.weightY);
 
@@ -122,6 +140,22 @@ namespace MD_Projekt
                     }
                 }
             }
+
+            //robocze wyświetlanie macierzy wag z lewej strony ekranu
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < numOfVertices; i++)
+            {
+                for (int j = 0; j < numOfVertices; j++)
+                {
+                    sb.Append(matrix[i, j]);
+                    sb.Append(" ");
+                }
+                sb.Append("\n");
+            }
+
+            matrixBlock.Text = sb.ToString();
+
         }
     }
 }
