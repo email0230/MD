@@ -59,6 +59,16 @@ namespace MD_Projekt
                 return;
             }
 
+            if (!int.TryParse(minWeightText.Text, out var minWeight))
+            {
+                return;
+            }
+
+            if (!int.TryParse(maxWeightText.Text, out var maxWeight))
+            {
+                return;
+            }
+
             // creating vertex array
             verts = new Vertex[numOfVertices];
 
@@ -100,7 +110,15 @@ namespace MD_Projekt
                             Stroke = Brushes.Black,
                             StrokeThickness = 1
                         };
+
+                        LineContainer lineCon = new LineContainer(verts[i], verts[j], line, minWeight, maxWeight);
+
                         canvas.Children.Add(line);
+
+                        Canvas.SetLeft(lineCon.text, lineCon.weightX);
+                        Canvas.SetTop(lineCon.text, lineCon.weightY);
+
+                        canvas.Children.Add(lineCon.text);
                     }
                 }
             }
