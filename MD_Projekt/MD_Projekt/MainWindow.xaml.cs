@@ -156,6 +156,35 @@ namespace MD_Projekt
 
             matrixBlock.Text = sb.ToString();
 
+
+            //wypisywanie trójkątów
+            List<string> triangles = new List<string>();
+
+            for (int i = 0; i < numOfVertices; i++)
+            {
+                for (int j = i + 1; j < numOfVertices; j++)
+                {
+                    if (matrix[i, j] > 0)
+                    {
+                        for (int k = j + 1; k < numOfVertices; k++)
+                        {
+                            if (matrix[j, k] > 0 && matrix[k, i] > 0)
+                            {
+                                char c1 = (char)(i + 65);
+                                char c2 = (char)(j + 65);
+                                char c3 = (char)(k + 65);
+                                triangles.Add(c1.ToString() + c2.ToString() + c3.ToString());
+                            } 
+                        }
+                    } 
+                }
+            }
+
+            sb = new StringBuilder();
+
+            foreach (string tri in triangles) sb.AppendLine(tri);
+            
+            trianglesBlock.Text = sb.ToString();
         }
     }
 }

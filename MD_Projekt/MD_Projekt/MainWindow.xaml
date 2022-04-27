@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MD_Projekt"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="800">
     <Grid Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
@@ -24,6 +24,7 @@
             <TextBox Name="maxWeightText" FontSize="14" Margin="5"></TextBox>
             <Button Height="50" Margin="5" Click="Draw" Content="Rysuj"/>
             <TextBlock Margin="5" Name="matrixBlock" FontSize="8"></TextBlock>
+            <TextBlock Margin="5" Name="trianglesBlock" FontSize="8"></TextBlock>
         </StackPanel>
     </Grid>
 </Window>
