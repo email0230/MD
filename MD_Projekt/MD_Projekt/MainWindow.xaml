@@ -10,8 +10,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160"/>
             <ColumnDefinition Width="18*"/> <!--co oznaczają *?-->
-            <ColumnDefinition Width="47*"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="47*"/> <!-- * oznaczają, że kolumna będzie zajmować 47/(18+47) części miejsca nie zarezerwowanego przez resztę kolumn z maksymalnych 1000px-->
+            <ColumnDefinition Width="200"/> <!-- btw, po co 4 kolumny?-->
         </Grid.ColumnDefinitions>
 
         <Border Background="GhostWhite" BorderBrush="Silver" BorderThickness="0,1,1,0" CornerRadius="0">
@@ -35,11 +35,12 @@
                 <TextBox Name="pair" FontSize="14" Margin="5"/>
                 <Label FontSize="14" Margin="5" Content="Nowa waga:"/>
                 <TextBox Name="weight" FontSize="14" Margin="5"/>
-                <Button Height="30" Margin="5" Click="Edit" Content="Dodaj krawedź"/>
+                <Button Height="30" Margin="5" Click="Edit" Content="Edytuj krawędź"/>
             </StackPanel>
         </Border>
         
         <!--Chciałbym rysować border dookoła Canvas zamiast lewego panelu, ale nie mam najmniejszego pojęcia jak się doń odwołać-->
+        <!--Ja też nie-->
         
         <StackPanel Grid.Column="3">
             <TextBlock Margin="5" Name="matrixBlock" FontSize="12"></TextBlock>

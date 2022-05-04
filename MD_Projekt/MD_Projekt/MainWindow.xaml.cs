@@ -104,6 +104,22 @@ namespace MD_Projekt
                 }
             }
 
+            if (circle)
+            {
+                ellipse = new Ellipse()
+                {
+                    Width = 400,
+                    Height = 400
+                };
+
+                ellipse.Stroke = System.Windows.Media.Brushes.Gray;
+                ellipse.Fill = System.Windows.Media.Brushes.LightGray;
+
+                ellipse.Margin = new Thickness(105, 105, 0, 0);
+
+                canvas.Children.Add(ellipse);
+            }
+
             // drawing vertices
             foreach (var vertex in verts)
             {
@@ -158,6 +174,17 @@ namespace MD_Projekt
                 }
             }
 
+            //sprawdzanie czy graf jest kliką
+            bool clique = true;
+
+            for (int i = 0; i < numOfVertices; i++)
+            {
+                for (int j = i + 1; j < numOfVertices; j++)
+                {
+                    if (matrix[i, j] == 0) clique = false;
+                }
+            }
+
             //robocze wyświetlanie macierzy wag z lewej strony ekranu
             StringBuilder sb = new StringBuilder();
 
@@ -172,6 +199,9 @@ namespace MD_Projekt
                 }
                 sb.Append("\n");
             }
+
+            if (clique) sb.Append("\nGraf jest kliką.\n");
+            else sb.Append("\nGraf nie jest kliką.\n");
 
             matrixBlock.Text = sb.ToString();
 
@@ -201,7 +231,9 @@ namespace MD_Projekt
 
             sb = new StringBuilder();
 
-            sb.Append("Trójkąty: \n\n");
+            sb.Append("Trójkąty (");
+            sb.Append(triangles.Count);
+            sb.Append("): \n\n");
 
             foreach (string tri in triangles) sb.AppendLine(tri);
             
@@ -258,6 +290,16 @@ namespace MD_Projekt
         {
             int numOfVertices = (int)Math.Sqrt(matrix.Length);
 
+            bool clique = true;
+
+            for (int i = 0; i < numOfVertices; i++)
+            {
+                for (int j = i + 1; j < numOfVertices; j++)
+                {
+                    if (matrix[i, j] == 0) clique = false;
+                }
+            }
+
             StringBuilder sb = new StringBuilder();
 
             sb.Append("Macierz wag: \n\n");
@@ -271,6 +313,9 @@ namespace MD_Projekt
                 }
                 sb.Append("\n");
             }
+
+            if (clique) sb.Append("\nGraf jest kliką.\n");
+            else sb.Append("\nGraf nie jest kliką.\n");
 
             matrixBlock.Text = sb.ToString();
 
@@ -298,7 +343,9 @@ namespace MD_Projekt
 
             sb = new StringBuilder();
 
-            sb.Append("Trójkąty: \n\n");
+            sb.Append("Trójkąty (");
+            sb.Append(triangles.Count);
+            sb.Append("): \n\n");
 
             foreach (string tri in triangles) sb.AppendLine(tri);
 
@@ -308,18 +355,24 @@ namespace MD_Projekt
         //obliczanie odległości od podanego wierzchołka, łączy się z Dijkstrą
         private void Calculate(object sender, RoutedEventArgs e)
         {
+            if (start.Text.Length < 1) return;
+
+            if (matrix is null) return;
+
             // getting input number
-            int begin = start.Text[0] - 65;
+            int begin = start.Text.ToUpper()[0] - 65;
 
             int numOfVertices = (int)Math.Sqrt(matrix.Length);
 
-            if (matrix.Length == 0) return;
+            if (begin >= numOfVertices || begin < 0 || begin > 26) return;
 
             int[] distance = Dijkstra(matrix, begin, numOfVertices);
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("Odległości od wierzchołka: \n\n");
+            sb.Append("Odległości od wierzchołka ");
+            sb.Append(start.Text.ToUpper()[0]);
+            sb.Append(": \n\n");
 
             for (int i = 0; i < numOfVertices; ++i)
             {
@@ -339,9 +392,16 @@ namespace MD_Projekt
         //edytowanie wagi linii grafu, przy wadze 0 usuwa linię
         private void Edit(object sender, RoutedEventArgs e)
         {
+            if (pair.Text.Length < 2) return;
+            if (matrix is null) return;
+
             // getting input number
-            int start = pair.Text[0] - 65;
-            int end = pair.Text[1] - 65;
+            int start = pair.Text.ToUpper()[0] - 65;
+            int end = pair.Text.ToUpper()[1] - 65;
+            int numOfVertices = (int)Math.Sqrt(matrix.Length);
+
+            if (start >= numOfVertices || end >= numOfVertices || start < 0 || start > 26 || end < 0 || end > 26) return;
+
             int oldWeight = matrix[start, end];
 
             if (!int.TryParse(weight.Text, out var newWeight))
@@ -415,6 +475,7 @@ namespace MD_Projekt
             }
 
             PrintReport(sender, e);
+            Calculate(sender, e);
         }
     }
 }
