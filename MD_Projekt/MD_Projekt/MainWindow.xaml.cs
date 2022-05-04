@@ -144,6 +144,8 @@ namespace MD_Projekt
             //robocze wyświetlanie macierzy wag z lewej strony ekranu
             StringBuilder sb = new StringBuilder();
 
+            sb.Append("Macierz wag: \n\n");
+
             for (int i = 0; i < numOfVertices; i++)
             {
                 for (int j = 0; j < numOfVertices; j++)
@@ -182,9 +184,85 @@ namespace MD_Projekt
 
             sb = new StringBuilder();
 
+            sb.Append("Trójkąty: \n\n");
+
             foreach (string tri in triangles) sb.AppendLine(tri);
             
             trianglesBlock.Text = sb.ToString();
+        }
+
+        //to część algorytmu Dijkstry do wyliczania najkrótszej drogi, wzięte z neta
+        private static int MinimumDistance(int[] distance, bool[] shortestPathTreeSet, int verticesCount)
+        {
+            int min = int.MaxValue;
+            int minIndex = 0;
+
+            for (int v = 0; v < verticesCount; ++v)
+            {
+                if (shortestPathTreeSet[v] == false && distance[v] <= min)
+                {
+                    min = distance[v];
+                    minIndex = v;
+                }
+            }
+
+            return minIndex;
+        }
+
+        public static int[] Dijkstra(int[,] graph, int source, int verticesCount)
+        {
+            int[] distance = new int[verticesCount];
+            bool[] shortestPathTreeSet = new bool[verticesCount];
+
+            for (int i = 0; i < verticesCount; ++i)
+            {
+                distance[i] = int.MaxValue;
+                shortestPathTreeSet[i] = false;
+            }
+
+            distance[source] = 0;
+
+            for (int count = 0; count < verticesCount - 1; ++count)
+            {
+                int u = MinimumDistance(distance, shortestPathTreeSet, verticesCount);
+                shortestPathTreeSet[u] = true;
+
+                for (int v = 0; v < verticesCount; ++v)
+                    if (!shortestPathTreeSet[v] && Convert.ToBoolean(graph[u, v]) && distance[u] != int.MaxValue && distance[u] + graph[u, v] < distance[v])
+                        distance[v] = distance[u] + graph[u, v];
+            }
+
+            return distance;
+        }
+
+        private void Calculate(object sender, RoutedEventArgs e)
+        {
+            // getting input number
+            int begin = start.Text[0] - 65;
+
+            int numOfVertices = (int)Math.Sqrt(matrix.Length);
+
+            if (matrix.Length == 0) return;
+
+            int[] distance = Dijkstra(matrix, begin, numOfVertices);
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("Odległości od wierzchołka: \n\n");
+
+            for (int i = 0; i < numOfVertices; ++i)
+            {
+                if(distance[i] == 0 || distance[i] == int.MaxValue) continue;
+
+                sb.Append("|");
+                sb.Append((char)(begin + 65));
+                sb.Append((char)(i + 65));
+                sb.Append("| = ");
+                sb.Append(distance[i]);
+                sb.Append("\n");
+            }
+
+            distanceBlock.Text = sb.ToString();
         }
     }
 }

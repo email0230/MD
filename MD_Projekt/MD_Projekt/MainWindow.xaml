@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MD_Projekt"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="600" Width="1000">
     <Grid Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
@@ -23,8 +24,14 @@
             <Label FontSize="14" Margin="5" Content="Maksymalna waga:"></Label>
             <TextBox Name="maxWeightText" FontSize="14" Margin="5"></TextBox>
             <Button Height="50" Margin="5" Click="Draw" Content="Rysuj"/>
-            <TextBlock Margin="5" Name="matrixBlock" FontSize="8"></TextBlock>
-            <TextBlock Margin="5" Name="trianglesBlock" FontSize="8"></TextBlock>
+            <Label FontSize="14" Margin="5" Content="Podaj wierzchołek:"></Label>
+            <TextBox Name="start" FontSize="14" Margin="5"></TextBox>
+            <Button Height="50" Margin="5" Click="Calculate" Content="Oblicz odległości"/>
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+            <TextBlock Margin="5" Name="matrixBlock" FontSize="12"></TextBlock>
+            <TextBlock Margin="5" Name="trianglesBlock" FontSize="12"></TextBlock>
+            <TextBlock Margin="5" Name="distanceBlock" FontSize="12"></TextBlock>
         </StackPanel>
     </Grid>
 </Window>
