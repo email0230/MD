@@ -27,6 +27,7 @@ namespace MD_Projekt
         int[,] matrix;
         List<LineContainer> lines;
         List<string> triangles;
+        bool circle;
         public MainWindow()
         {
             InitializeComponent();
@@ -38,11 +39,21 @@ namespace MD_Projekt
         {
             canvas = new Canvas();
             canvas.Width = 600;
-            canvas.Height = 400;
+            canvas.Height = 600;
             canvas.Background = Brushes.Bisque;
             canvas.Margin = new Thickness(175, 0, 0, 0);
 
             grid.Children.Add(canvas);
+        }
+
+        private void HandleCheck(object sender, RoutedEventArgs e)
+        {
+            circle = true;
+        }
+
+        private void HandleUnchecked(object sender, RoutedEventArgs e)
+        {
+            circle = false;
         }
 
         private void Draw(object sender, RoutedEventArgs e)
@@ -79,7 +90,7 @@ namespace MD_Projekt
 
             for (int i = 0; i < numOfVertices; i++)
             { 
-                verts[i] = new Vertex(i);
+                verts[i] = new Vertex(i, circle, numOfVertices);
             }
 
             //creating matrix of weights

@@ -16,15 +16,24 @@ namespace MD_Projekt
         public int textY;
         public TextBlock text;
 
-        public Vertex(int i)
+        public Vertex(int i, bool circle, int n)
         {
             vertexNumber = i;
+            int r = 200;
 
-            Random random = new Random();
+            if (circle)
+            {
+                X = (int)(r * Math.Sin(2 * Math.PI / n * (i + 1)) + 300);
+                Y = (int)(r * Math.Cos(2 * Math.PI / n * (i + 1)) + 300);
+            }
+            else
+            {
+                Random random = new Random();
 
-            // 25px margin
-            X = 25 + random.Next(550); 
-            Y = 25 + random.Next(350);
+                // 25px margin
+                X = 25 + random.Next(550);
+                Y = 25 + random.Next(550);
+            }
 
             textX = X - 15;
             textY = Y - 5;

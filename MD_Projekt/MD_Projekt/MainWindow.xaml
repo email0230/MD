@@ -23,15 +23,18 @@
             <TextBox Name="minWeightText" FontSize="14" Margin="5"></TextBox>
             <Label FontSize="14" Margin="5" Content="Maksymalna waga:"></Label>
             <TextBox Name="maxWeightText" FontSize="14" Margin="5"></TextBox>
-            <Button Height="50" Margin="5" Click="Draw" Content="Rysuj"/>
+            <CheckBox Name="onCircle" Margin="5" Checked="HandleCheck" Unchecked="HandleUnchecked" >Wierzchołki na okręgu</CheckBox>
+            <Button Height="30" Margin="5" Click="Draw" Content="Rysuj"/>
+
             <Label FontSize="14" Margin="5" Content="Podaj wierzchołek:"></Label>
             <TextBox Name="start" FontSize="14" Margin="5"></TextBox>
-            <Button Height="50" Margin="5" Click="Calculate" Content="Oblicz odległości"/>
+            <Button Height="30" Margin="5" Click="Calculate" Content="Oblicz odległości"/>
+            
             <Label FontSize="14" Margin="5" Content="Podaj parę wierzch:"></Label>
             <TextBox Name="pair" FontSize="14" Margin="5"></TextBox>
             <Label FontSize="14" Margin="5" Content="Nowa waga:"></Label>
             <TextBox Name="weight" FontSize="14" Margin="5"></TextBox>
-            <Button Height="50" Margin="5" Click="Edit" Content="Edytuj"/>
+            <Button Height="30" Margin="5" Click="Edit" Content="Edytuj"/>
         </StackPanel>
         <StackPanel Grid.Column="2">
             <TextBlock Margin="5" Name="matrixBlock" FontSize="12"></TextBlock>
