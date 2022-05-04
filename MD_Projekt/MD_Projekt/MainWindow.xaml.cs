@@ -25,6 +25,8 @@ namespace MD_Projekt
         Ellipse ellipse;
         Line line;
         int[,] matrix;
+        List<LineContainer> lines;
+        List<string> triangles;
         public MainWindow()
         {
             InitializeComponent();
@@ -45,6 +47,8 @@ namespace MD_Projekt
 
         private void Draw(object sender, RoutedEventArgs e)
         {
+            lines = new List<LineContainer>();
+
             CreateCanvas();
 
             Random random = new Random();
@@ -130,6 +134,8 @@ namespace MD_Projekt
                         // drawing line
                         LineContainer lineCon = new LineContainer(verts[i], verts[j], line, minWeight, maxWeight, matrix);
 
+                        lines.Add(lineCon);
+
                         canvas.Children.Add(line);
 
                         //drawing weight
@@ -160,7 +166,7 @@ namespace MD_Projekt
 
 
             //wypisywanie trójkątów
-            List<string> triangles = new List<string>();
+            triangles = new List<string>();
 
             for (int i = 0; i < numOfVertices; i++)
             {
@@ -208,7 +214,7 @@ namespace MD_Projekt
 
             return minIndex;
         }
-
+        //to część algorytmu Dijkstry do wyliczania najkrótszej drogi, wzięte z neta
         public static int[] Dijkstra(int[,] graph, int source, int verticesCount)
         {
             int[] distance = new int[verticesCount];
@@ -234,7 +240,61 @@ namespace MD_Projekt
 
             return distance;
         }
+        //tu się kończu część wzięta z neta
 
+        //funkcja do wypisywania raportu po edycji linii
+        private void PrintReport(object sender, RoutedEventArgs e)
+        {
+            int numOfVertices = (int)Math.Sqrt(matrix.Length);
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("Macierz wag: \n\n");
+
+            for (int i = 0; i < numOfVertices; i++)
+            {
+                for (int j = 0; j < numOfVertices; j++)
+                {
+                    sb.Append(matrix[i, j]);
+                    sb.Append(" ");
+                }
+                sb.Append("\n");
+            }
+
+            matrixBlock.Text = sb.ToString();
+
+            triangles = new List<string>();
+
+            for (int i = 0; i < numOfVertices; i++)
+            {
+                for (int j = i + 1; j < numOfVertices; j++)
+                {
+                    if (matrix[i, j] > 0)
+                    {
+                        for (int k = j + 1; k < numOfVertices; k++)
+                        {
+                            if (matrix[j, k] > 0 && matrix[k, i] > 0)
+                            {
+                                char c1 = (char)(i + 65);
+                                char c2 = (char)(j + 65);
+                                char c3 = (char)(k + 65);
+                                triangles.Add(c1.ToString() + c2.ToString() + c3.ToString());
+                            }
+                        }
+                    }
+                }
+            }
+
+            sb = new StringBuilder();
+
+            sb.Append("Trójkąty: \n\n");
+
+            foreach (string tri in triangles) sb.AppendLine(tri);
+
+            trianglesBlock.Text = sb.ToString();
+        }
+
+        //obliczanie odległości od podanego wierzchołka, łączy się z Dijkstrą
         private void Calculate(object sender, RoutedEventArgs e)
         {
             // getting input number
@@ -263,6 +323,87 @@ namespace MD_Projekt
             }
 
             distanceBlock.Text = sb.ToString();
+        }
+
+        //edytowanie wagi linii grafu, przy wadze 0 usuwa linię
+        private void Edit(object sender, RoutedEventArgs e)
+        {
+            // getting input number
+            int start = pair.Text[0] - 65;
+            int end = pair.Text[1] - 65;
+            int oldWeight = matrix[start, end];
+
+            if (!int.TryParse(weight.Text, out var newWeight))
+            {
+                return;
+            }
+
+            if (newWeight == oldWeight) return;
+
+            if (newWeight == 0)
+            {
+                matrix[start, end] = newWeight;
+                matrix[end, start] = newWeight;
+
+                foreach (var item in lines)
+                {
+                    if ((item.v1.vertexNumber == start && item.v2.vertexNumber == end) || (item.v2.vertexNumber == start && item.v1.vertexNumber == end))
+                    {
+                        canvas.Children.Remove(item.line);
+                        canvas.Children.Remove(item.text);
+                        item.weight = newWeight;
+                    }
+                }
+            }
+            else if (oldWeight > 0)
+            {
+                matrix[start, end] = newWeight;
+                matrix[end, start] = newWeight;
+
+                foreach (var item in lines)
+                {
+                    if ((item.v1.vertexNumber == start && item.v2.vertexNumber == end) || (item.v2.vertexNumber == start && item.v1.vertexNumber == end))
+                    {
+                        canvas.Children.Remove(item.text);
+                        item.weight = newWeight;
+                        item.text.Text = newWeight.ToString();
+
+                        Canvas.SetLeft(item.text, item.weightX);
+                        Canvas.SetTop(item.text, item.weightY);
+
+                        canvas.Children.Add(item.text);
+                    }
+                }
+            }
+            else if (oldWeight == 0)
+            {
+                matrix[start, end] = newWeight;
+                matrix[end, start] = newWeight;
+
+                line = new Line()
+                {
+                    X1 = verts[start].X + 5, // +5 dla wyśrodkowania okręgu wierzchołka
+                    Y1 = verts[start].Y + 5,
+                    X2 = verts[end].X + 5,
+                    Y2 = verts[end].Y + 5,
+                    Stroke = Brushes.Black,
+                    StrokeThickness = 1
+                };
+                // drawing line
+                LineContainer lineCon = new LineContainer(verts[start], verts[end], line, newWeight, newWeight, matrix);
+
+                lines.Add(lineCon);
+
+                canvas.Children.Add(line);
+
+                //drawing weight
+                Canvas.SetLeft(lineCon.text, lineCon.weightX);
+                Canvas.SetTop(lineCon.text, lineCon.weightY);
+
+                canvas.Children.Add(lineCon.text);
+            }
+
+            PrintReport(sender, e);
         }
     }
 }

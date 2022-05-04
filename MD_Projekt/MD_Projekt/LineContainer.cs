@@ -10,10 +10,10 @@ namespace MD_Projekt
 {
     internal class LineContainer
     {
-        Vertex v1;
-        Vertex v2;
-        Line line;
-        int weight;
+        public Vertex v1;
+        public Vertex v2;
+        public Line line;
+        public int weight;
         public int weightX;
         public int weightY;
         public TextBlock text;
