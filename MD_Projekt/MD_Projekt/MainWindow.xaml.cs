@@ -32,6 +32,8 @@ namespace MD_Projekt
         {
             InitializeComponent();
 
+            authors.Text = "Autorzy:\nMateusz Cypcer\nFilip Ryczko";
+
             CreateCanvas();
         }
 
